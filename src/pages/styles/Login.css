@@ -1,0 +1,33 @@
+.login-Tile {
+  width: 21rem;
+}
+/* tab */
+@media (min-width: 40rem) {
+  .login-Tile {
+    width: 45rem;
+  }
+}
+
+/*lap */
+@media (min-width: 80rem) {
+  .login-Tile {
+    width: 40rem;
+  }
+}
+
+.login-main {
+  margin-top: 1rem;
+}
+/* tab */
+@media (min-width: 40rem) {
+  .login-main {
+    margin-top: 1.6rem;
+  }
+}
+
+/*lap */
+@media (min-width: 80rem) {
+  .login-main {
+    margin-top: 7.2rem;
+  }
+}
