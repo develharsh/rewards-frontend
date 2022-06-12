@@ -1,0 +1,97 @@
+.vouch-main {
+}
+
+.vouch-sidepane {
+  /* Layout Properties */
+  top: 94px;
+  left: 0px;
+  width: 328px;
+  height: 100vh;
+  overflow-y: scroll;
+  /* UI Properties */
+  background: #d6e1f2 0% 0% no-repeat padding-box;
+}
+
+.vouch-sidep-items > h1 {
+  /* Layout Properties */
+  /* top: 146px;
+  left: 32px;
+  width: 110px;
+  height: 28px; */
+  /* UI Properties */
+  /* text-align: left; */
+  font: normal normal medium 20px/30px Poppins;
+  /* letter-spacing: 0px; */
+  color: #3a0d27;
+  /* opacity: 1; */
+}
+
+.vouch-sidep-items > p {
+  /* Layout Properties */
+  margin-top: 10px;
+  /* top: 190px;
+  left: 32px;
+  width: 120px;
+  height: 25px; */
+  /* UI Properties */
+  /* text-align: left; */
+  font: normal normal normal 18px/27px Poppins;
+  /* letter-spacing: 0px; */
+  color: #615f5f;
+  opacity: 0.75;
+  display: flex;
+  gap: 8px;
+}
+
+.vouch-body {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.vouch-explore {
+  font: normal normal medium 30px/46px Poppins;
+  color: #3a0d27;
+}
+
+.vouch-points {
+  font: normal normal medium 20px/30px Poppins;
+  color: #615f5f;
+}
+
+.vouch-card {
+  width: 16em;
+  /* border: 2px solid blue; */
+  text-align: center;
+}
+
+.vouch-card > img {
+  width: 16em;
+  height: 10em;
+  /* UI Properties */
+  /* border-radius: 15px; */
+  object-fit: cover;
+  /* border: 2px solid red; */
+}
+
+.vouch-card > p {
+  font: normal normal normal 18px/27px Poppins;
+  color: #615f5f;
+  margin: 1em;
+  /* border:1px solid red; */
+}
+
+.vouch-select-btn {
+  margin: 0 auto;
+  width: 8em;
+  height: 2em;
+  /* border: 3px solid blue; */
+  cursor: pointer;
+}
+
+/* tab */
+@media (min-width: 40rem) {
+}
+/*lap */
+@media (min-width: 80rem) {
+}
