@@ -40,27 +40,29 @@ function Vouchers() {
   useEffect(() => {
     if (user === null) {
       navigate("/login");
-    } else if (user) {
-      if (error) {
-        // console.log(error)
-        Swal.fire("Oops", error, "error");
-        dispatch(clearErrors());
-      }
-      if (message) {
-        // console.log(message)
-        Swal.fire({
-          icon: "success",
-          title: "Congrats",
-          html: `Please Take Screenshot of Below:<br/>Deliver Status: <b>${message.deliveryStatus}</b><br/>Order Status: <b>${message.orderStatus}
-            </b><br/>Validity: <b>${message.vouchers[0].validity}</b><br/>Voucher Code: <b>${message.vouchers[0].voucherCode}</b>`,
-        }).then(() => dispatch(clearMessages()));
-        dispatch(loadUser());
-      }
-      if (!vouchers) {
-        dispatch(fetchVouchers(page));
-      }
     }
-  }, [dispatch, vouchers, error, message, user]);
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    if (error) {
+      // console.log(error)
+      Swal.fire("Oops", error, "error");
+      dispatch(clearErrors());
+    }
+    if (message) {
+      console.log(message);
+      Swal.fire({
+        icon: "success",
+        title: "Congrats",
+        html: `Please Take Screenshot of Below:<br/>Deliver Status: <b>${message.deliveryStatus}</b><br/>Order Status: <b>${message.orderStatus}
+            </b><br/>Validity: <b>${message.vouchers[0].validity}</b><br/>Voucher Code: <b>${message.vouchers[0].voucherCode}</b>`,
+      }).then(() => dispatch(clearMessages()));
+      dispatch(loadUser());
+    }
+    if (!vouchers) {
+      dispatch(fetchVouchers(page));
+    }
+  }, [dispatch, vouchers, error, message]);
 
   function handlePage(newPage) {
     dispatch(fetchVouchers(newPage));
@@ -142,11 +144,15 @@ function Vouchers() {
                   <img src={each.imageUrl} alt="" />
                   <p>{each.name}</p>
                   <div className="flex justify-evenly my-2">
+                    <p className="label">Denomination</p>
                     <Denomination
                       id={each.productId}
                       data={each.valueDenominations}
                       handleChange={handleChange}
                     />
+                  </div>
+                  <div className="flex justify-evenly my-2">
+                    <p className="label">Quantity</p>
                     <Quantity id={each.productId} handleChange={handleChange} />
                   </div>
                   <div className="my-2">
@@ -173,61 +179,33 @@ function Vouchers() {
 }
 function Quantity({ id, handleChange }) {
   return (
-    <select
-      className="form-select appearance-none
-      block
-      px-1.5
-      py-1.5
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding bg-no-repeat
-      border border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0
-      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-      onChange={(e) => handleChange(id, "quantity", e.target.value)}
-    >
-      <option value="-1">Quantity</option>
-      {[
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-      ].map((each, idx) => (
-        <option key={idx} value={each}>
-          {each}
-        </option>
-      ))}
-    </select>
+    <div className="select-bg">
+      <select onChange={(e) => handleChange(id, "quantity", e.target.value)}>
+        {[
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        ].map((each, idx) => (
+          <option key={idx} value={each}>
+            {each}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 }
 
 function Denomination({ id, data, handleChange }) {
   return (
-    <select
-      className="form-select appearance-none
-      block
-      px-1.5
-      py-1.5
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding bg-no-repeat
-      border border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0
-      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-      onChange={(e) => handleChange(id, "denomination", e.target.value)}
-    >
-      <option value="-1">Denominations</option>
-      {data.split(",").map((each, idx) => (
-        <option key={idx} value={each}>
-          {each}
-        </option>
-      ))}
-    </select>
+    <div className="select-bg">
+      <select
+        onChange={(e) => handleChange(id, "denomination", e.target.value)}
+      >
+        {data.split(",").map((each, idx) => (
+          <option key={idx} value={each}>
+            {each}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 }
 

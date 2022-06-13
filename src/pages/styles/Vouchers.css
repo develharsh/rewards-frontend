@@ -63,6 +63,7 @@
   width: 16em;
   /* border: 2px solid blue; */
   text-align: center;
+  /* background-color: #000; */
 }
 
 .vouch-card > img {
@@ -79,6 +80,16 @@
   color: #615f5f;
   margin: 1em;
   /* border:1px solid red; */
+}
+
+.label {
+  background-color: #3c0c24;
+  color: #fff;
+  font-family: "Tai Heritage Pro", serif;
+  height: 2em;
+  align-items: center;
+  padding: 4px 18px 2px 18px;
+  border-radius: 30px;
 }
 
 .vouch-select-btn {
