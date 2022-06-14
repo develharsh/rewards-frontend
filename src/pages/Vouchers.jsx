@@ -1,4 +1,3 @@
-import Header from "../components/Layout/Header";
 import "./styles/Vouchers.css";
 import { BsArrowLeftCircle } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,6 +25,7 @@ function Vouchers() {
     productId: -1,
     quantity: -1,
     denomination: -1,
+    imageUrl: "",
   });
   function handleChange(id, key, value) {
     value = Number(value);
@@ -97,13 +97,18 @@ function Vouchers() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Redeem!",
     }).then((result) => {
-      if (result.isConfirmed) dispatch(placeOrder(order));
+      if (result.isConfirmed) {
+        const imageUrl = vouchers.filter(
+          each => each.productId === order.productId
+        )[0].imageUrl;
+        order.imageUrl = imageUrl;
+        dispatch(placeOrder(order));
+      }
     });
   }
 
   return (
     <>
-      <Header />
       {loading && <Loader />}
       <div className="vouch-main flex">
         <div className="vouch-sidepane">

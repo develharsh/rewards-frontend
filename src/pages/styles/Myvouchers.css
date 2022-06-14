@@ -1,0 +1,19 @@
+.myv-card {
+  width: 328px;
+}
+
+.myv-cardimg {
+  width: 328px;
+}
+
+.myv-card-title {
+  text-align: left;
+  font: normal normal normal 18px/27px Poppins;
+  color: #615f5f;
+}
+
+.myv-card-desc {
+  text-align: left;
+  font: normal normal normal 16px/25px Poppins;
+  color: #1b2534;
+}

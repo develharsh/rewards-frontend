@@ -41,7 +41,9 @@
 }
 
 .dash-rewards-hr {
-  width: 110px;
+  /* position: absolute; */
+  margin-top: -3px !important;
+  width: 100px;
   height: 3px;
   background: #db716d 0% 0% no-repeat padding-box;
   border-radius: 2px;
@@ -117,24 +119,44 @@
     padding-box;
 }
 
-.dash-logs :nth-child(1) {
-  font: normal normal 300 20px/30px Poppins;
+.dash-date {
+  /* text-align: left; */
+  font-size: 15px;
+  font-family: "Poppins";
   color: #1b2534;
 }
 
-.dash-logs :nth-child(2) {
-  font: normal normal normal 20px/30px Poppins;
+.dash-text {
+  font-size: 15px;
+  font-family: "Poppins";
   color: #1b2534;
 }
-.dash-logs :nth-child(3) {
-  font: normal normal medium 30px/46px Poppins;
-  color: #1b2534;
+
+.dash-points {
   display: flex;
 }
 
+.dash-points > span {
+  font-size: 15px;
+  font-family: "Poppins";
+  color: #1b2534;
+  margin-top: 5px;
+  margin-left: 8px;
+}
+
+.dash-profit {
+  object-fit: contain;
+  width: 25px;
+  height: 23px;
+  margin-top: 4px;
+  margin-right: 5px;
+}
 .dash-loss {
-  color: #615f5f;
-  opacity: 0.75;
+  object-fit: contain;
+  width: 25px;
+  height: 23px;
+  margin-top: 4px;
+  margin-right: 5px;
 }
 
 /* tab */

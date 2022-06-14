@@ -3,9 +3,11 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { user } from "./reducers/user";
 import { voucher } from "./reducers/voucher";
+import { logs } from "./reducers/logs";
 const reducer = combineReducers({
   user,
-  voucher
+  voucher,
+  logs
 });
 let initialState = {};
 const middleware = [thunk];

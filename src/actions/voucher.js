@@ -5,6 +5,9 @@ import {
   FETCH_VOUCHERS_REQUEST,
   FETCH_VOUCHERS_SUCCESS,
   FETCH_VOUCHERS_FAIL,
+  FETCH_MYVOUCHERS_REQUEST,
+  FETCH_MYVOUCHERS_SUCCESS,
+  FETCH_MYVOUCHERS_FAIL,
   PLACE_ORDER_REQUEST,
   PLACE_ORDER_SUCCESS,
   PLACE_ORDER_FAIL,
@@ -54,12 +57,38 @@ export const placeOrder = (order) => async (dispatch) => {
     // console.log(data)
     dispatch({
       type: PLACE_ORDER_SUCCESS,
-      payload: data.data.data.placeOrder.data
+      payload: data.data.data.placeOrder.data,
     });
   } catch (error) {
     // console.log(error)
     dispatch({
       type: PLACE_ORDER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//Fetch MyVouchers
+export const fetchMyVouchers = () => async (dispatch) => {
+  dispatch({ type: FETCH_MYVOUCHERS_REQUEST });
+  const token = cookie.load("token");
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_URL}my-vouchers`,
+      headers: {
+        "x-access-token": token,
+      },
+    });
+    const { data } = response;
+    console.log("A", data)
+    dispatch({
+      type: FETCH_MYVOUCHERS_SUCCESS,
+      payload: data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FETCH_MYVOUCHERS_FAIL,
       payload: error.response.data.message,
     });
   }
