@@ -1,7 +1,7 @@
 import "./styles/Vouchers.css";
 import { BsArrowLeftCircle } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import {
   fetchVouchers,
@@ -20,6 +20,9 @@ function Vouchers() {
     (state) => state.voucher
   );
   const { user } = useSelector((state) => state.user);
+  const modal = useRef(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [chosenProduct, setChosenProduct] = useState(null);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState({
     productId: -1,
@@ -36,6 +39,8 @@ function Vouchers() {
     } else {
       setOrder({ productId: id, quantity: -1, denomination: -1 });
     }
+    const prod = vouchers.filter((each) => each.productId === id)[0];
+    setChosenProduct(prod);
   }
   useEffect(() => {
     if (user === null) {
@@ -50,7 +55,7 @@ function Vouchers() {
       dispatch(clearErrors());
     }
     if (message) {
-      console.log(message);
+      // console.log(message);
       Swal.fire({
         icon: "success",
         title: "Congrats",
@@ -64,52 +69,122 @@ function Vouchers() {
     }
   }, [dispatch, vouchers, error, message]);
 
+  function toggleModal(id, title) {
+    if (!modalVisible) {
+      if (order.productId !== id) {
+        return Swal.fire(
+          "Oops",
+          `Please select denomination and quantity of ${title}`,
+          "warning"
+        );
+      }
+      if (order.denomination === -1) {
+        return Swal.fire(
+          "Oops",
+          `Please select denomination of ${title}`,
+          "warning"
+        );
+      }
+      if (order.quantity === -1) {
+        return Swal.fire(
+          "Oops",
+          `Please select quantity of ${title}`,
+          "warning"
+        );
+      }
+      modal.current.classList.remove("hidden");
+    } else {
+      modal.current.classList.add("hidden");
+    }
+    setModalVisible(!modalVisible);
+  }
+
   function handlePage(newPage) {
     dispatch(fetchVouchers(newPage));
     setPage(newPage);
   }
-  function handleSubmit(id, title) {
-    if (order.productId !== id) {
-      return Swal.fire(
-        "Oops",
-        `Please select denomination and quantity of ${title}`,
-        "warning"
-      );
-    }
-    if (order.denomination === -1) {
-      return Swal.fire(
-        "Oops",
-        `Please select denomination of ${title}`,
-        "warning"
-      );
-    }
-    if (order.quantity === -1) {
-      return Swal.fire("Oops", `Please select quantity of ${title}`, "warning");
-    }
-    Swal.fire({
-      title: "Are you sure?",
-      text: `Redeem ${title}, ${order.denomination} X ${order.quantity} = ${
-        order.denomination * order.quantity
-      }`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Redeem!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const imageUrl = vouchers.filter(
-          each => each.productId === order.productId
-        )[0].imageUrl;
-        order.imageUrl = imageUrl;
-        dispatch(placeOrder(order));
-      }
-    });
+  function handleSubmit() {
+    // Swal.fire({
+    //   title: "Are you sure?",
+    //   text: `Redeem ${title}, ${order.denomination} X ${order.quantity} = ${
+    //     order.denomination * order.quantity
+    //   }`,
+    //   icon: "question",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: "#d33",
+    //   confirmButtonText: "Yes, Redeem!",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     const selectedProd = vouchers.filter(
+    //       (each) => each.productId === order.productId
+    //     )[0];
+    //     const { imageUrl, name } = selectedProd;
+    //     order.imageUrl = imageUrl;
+    //     order.name = name;
+    //     dispatch(placeOrder(order));
+    //   }
+    // });
+    toggleModal();
+    order.imageUrl = chosenProduct.imageUrl;
+    order.name = chosenProduct.name;
+    dispatch(placeOrder(order));
   }
 
   return (
     <>
       {loading && <Loader />}
+
+      <div
+        ref={modal}
+        class="modal show hidden fade fixed top-0 left-0 w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+      >
+        <div class="modal-dialog relative w-auto pointer-events-none">
+          <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+            <div class="modal-body relative p-4">
+              <div className="modalImgDiv">
+                <img
+                  src="/assets/redeemyrvouch.png"
+                  className="modalImg"
+                  alt="modalImg"
+                />
+                <p>Redeem your vouchers</p>
+              </div>
+              {chosenProduct && (
+                <div className="ChosenProd mt-7">
+                  <img src={chosenProduct.imageUrl} alt="..." />
+                  <div className="flex flex-wrap justify-evenly">
+                    <p>
+                      Denomination: <span>{order.denomination}</span>
+                    </p>
+                    <p>
+                      Quantity: <span>{order.quantity}</span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              {/* <div style={{ height: "300px" }}></div> */}
+            </div>
+            <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-between p-4 border-t border-gray-200 rounded-b-md">
+              <button
+                onClick={toggleModal}
+                type="button"
+                className="modalCloseBtn px-6 py-2.5 text-white font-medium text-xs leading-tight shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleSubmit}
+                type="button"
+                className="modalCloseBtn px-6 py-2.5 text-white font-medium text-xs leading-tight shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+              >
+                Redeem
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="vouch-main flex">
         <div className="vouch-sidepane">
           <div className="vouch-sidep-items ml-5 pt-10">
@@ -155,17 +230,16 @@ function Vouchers() {
                       data={each.valueDenominations}
                       handleChange={handleChange}
                     />
-                  </div>
-                  <div className="flex justify-evenly my-2">
-                    <p className="label">Quantity</p>
+                    <p className="label ml-2">Quantity</p>
                     <Quantity id={each.productId} handleChange={handleChange} />
                   </div>
                   <div className="my-2">
                     <img
-                      src="/assets/select.svg"
+                      src="/assets/redeembtn.svg"
                       alt=""
                       className="vouch-select-btn"
-                      onClick={() => handleSubmit(each.productId, each.name)}
+                      onClick={() => toggleModal(each.productId, each.title)}
+                      // onClick={() => handleSubmit(each.productId, each.name)}
                     />
                   </div>
                 </div>

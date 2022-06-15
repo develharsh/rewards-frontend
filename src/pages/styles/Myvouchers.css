@@ -1,19 +1,31 @@
+.myv-body {
+  width: 100%;
+}
+
 .myv-card {
-  width: 328px;
+  width: 18em;
+  background-color: #1b2534;
+  margin-bottom: 1em;
 }
 
 .myv-cardimg {
-  width: 328px;
+  width: 18em;
+  height: 10em;
+  object-fit: cover;
 }
 
 .myv-card-title {
   text-align: left;
-  font: normal normal normal 18px/27px Poppins;
-  color: #615f5f;
+  font-size: 1.5em;
+  font-family: "Poppins";
+  color: #fff;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .myv-card-desc {
   text-align: left;
-  font: normal normal normal 16px/25px Poppins;
-  color: #1b2534;
+  font-family: "Poppins";
+  font-size: 12px;
+  color: #fff;
 }

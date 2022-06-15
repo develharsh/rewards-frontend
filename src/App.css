@@ -9,15 +9,17 @@ select {
   cursor: pointer;
   font-family: "Tai Heritage Pro", serif;
   font-size: 13px;
-  border-radius: 50%;
-  background: #fff;
+  border-radius: 20px;
+  background: white;
 }
 
-.select-bg{
+
+
+.select-bg {
   /* background: red; */
-  padding: 2px;
+  /* padding: 2px; */
   position: relative;
-  border-radius: 50%;
+  border-radius: 20px;
   border: 1px solid #000;
 }
 

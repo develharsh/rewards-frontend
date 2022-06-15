@@ -83,21 +83,59 @@
 }
 
 .label {
-  background-color: #3c0c24;
-  color: #fff;
   font-family: "Tai Heritage Pro", serif;
-  height: 2em;
-  align-items: center;
-  padding: 4px 18px 2px 18px;
-  border-radius: 30px;
+  margin-top: 3px;
 }
 
 .vouch-select-btn {
   margin: 0 auto;
   width: 8em;
-  height: 2em;
+  /* height: 2em; */
   /* border: 3px solid blue; */
   cursor: pointer;
+}
+
+.modalImgDiv {
+}
+
+.modalImg {
+  /* position: relative; */
+  height: 10em;
+  width: 100%;
+  /* margin-left: 50px; */
+}
+
+.modalImgDiv > p {
+  top: 90px;
+  font-weight: bold;
+  font-family: "Poppins";
+  left: 130px;
+  color: #db716d;
+  font-size: 20px;
+  position: absolute;
+}
+
+.ChosenProd > img {
+  object-fit: cover;
+  width: 30em;
+  height: 15em;
+}
+
+.ChosenProd > div > p {
+  margin-top: 20px;
+  font-family: "Poppins";
+  font-weight: bold;
+}
+.ChosenProd > div > p > span {
+  font-weight: normal !important;
+  border: 1px solid #000;
+  border-radius: 15px;
+  padding: 3px;
+}
+
+.modalCloseBtn{
+  background-color: #3A0D27;
+  border-radius: 32px;
 }
 
 /* tab */
