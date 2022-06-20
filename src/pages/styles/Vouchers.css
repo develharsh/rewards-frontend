@@ -115,6 +115,29 @@
   position: absolute;
 }
 
+.SuccessModalImgDiv {
+  text-align: center;
+  /* border: 10px solid red; */
+}
+
+.SuccessModalImgDiv {
+  /* position: relative; */
+  height: 10em;
+  width: 100%;
+  /* margin-left: 50px; */
+}
+
+.SuccessModalImgDiv > p {
+  width: 230px;
+  top: 60px;
+  font-weight: bold;
+  font-family: "Poppins";
+  left: 125px;
+  color: #db716d;
+  font-size: 20px;
+  position: absolute;
+}
+
 .ChosenProd > img {
   object-fit: cover;
   width: 30em;
@@ -133,8 +156,8 @@
   padding: 3px;
 }
 
-.modalCloseBtn{
-  background-color: #3A0D27;
+.modalCloseBtn {
+  background-color: #3a0d27;
   border-radius: 32px;
 }
 

@@ -11,7 +11,7 @@ import {
 } from "../actions/voucher";
 import { loadUser } from "../actions/user";
 import Loader from "../components/Layout/Loader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Vouchers() {
   const dispatch = useDispatch();
@@ -21,7 +21,9 @@ function Vouchers() {
   );
   const { user } = useSelector((state) => state.user);
   const modal = useRef(null);
+  const SuccessModal = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [chosenProduct, setChosenProduct] = useState(null);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState({
@@ -56,12 +58,8 @@ function Vouchers() {
     }
     if (message) {
       // console.log(message);
-      Swal.fire({
-        icon: "success",
-        title: "Congrats",
-        html: `Please Take Screenshot of Below:<br/>Deliver Status: <b>${message.deliveryStatus}</b><br/>Order Status: <b>${message.orderStatus}
-            </b><br/>Validity: <b>${message.vouchers[0].validity}</b><br/>Voucher Code: <b>${message.vouchers[0].voucherCode}</b>`,
-      }).then(() => dispatch(clearMessages()));
+      toggleSuccessModal();
+      dispatch(clearMessages());
       dispatch(loadUser());
     }
     if (!vouchers) {
@@ -97,6 +95,14 @@ function Vouchers() {
       modal.current.classList.add("hidden");
     }
     setModalVisible(!modalVisible);
+  }
+  function toggleSuccessModal() {
+    if (!successModalVisible) {
+      SuccessModal.current.classList.remove("hidden");
+    } else {
+      SuccessModal.current.classList.add("hidden");
+    }
+    setSuccessModalVisible(!successModalVisible);
   }
 
   function handlePage(newPage) {
@@ -135,55 +141,19 @@ function Vouchers() {
     <>
       {loading && <Loader />}
 
-      <div
-        ref={modal}
-        class="modal show hidden fade fixed top-0 left-0 w-full h-full outline-none overflow-x-hidden overflow-y-auto"
-      >
-        <div class="modal-dialog relative w-auto pointer-events-none">
-          <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
-            <div class="modal-body relative p-4">
-              <div className="modalImgDiv">
-                <img
-                  src="/assets/redeemyrvouch.png"
-                  className="modalImg"
-                  alt="modalImg"
-                />
-                <p>Redeem your vouchers</p>
-              </div>
-              {chosenProduct && (
-                <div className="ChosenProd mt-7">
-                  <img src={chosenProduct.imageUrl} alt="..." />
-                  <div className="flex flex-wrap justify-evenly">
-                    <p>
-                      Denomination: <span>{order.denomination}</span>
-                    </p>
-                    <p>
-                      Quantity: <span>{order.quantity}</span>
-                    </p>
-                  </div>
-                </div>
-              )}
-              {/* <div style={{ height: "300px" }}></div> */}
-            </div>
-            <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-between p-4 border-t border-gray-200 rounded-b-md">
-              <button
-                onClick={toggleModal}
-                type="button"
-                className="modalCloseBtn px-6 py-2.5 text-white font-medium text-xs leading-tight shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
-              >
-                Close
-              </button>
-              <button
-                onClick={handleSubmit}
-                type="button"
-                className="modalCloseBtn px-6 py-2.5 text-white font-medium text-xs leading-tight shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
-              >
-                Redeem
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal
+        modal={modal}
+        chosenProduct={chosenProduct}
+        toggleModal={toggleModal}
+        order={order}
+        handleSubmit={handleSubmit}
+      />
+
+      <SuccessModalComponent
+        modal={SuccessModal}
+        toggleSuccessModal={toggleSuccessModal}
+        chosenProduct={chosenProduct}
+      />
 
       <div className="vouch-main flex">
         <div className="vouch-sidepane">
@@ -256,6 +226,114 @@ function Vouchers() {
     </>
   );
 }
+
+function SuccessModalComponent({ modal, toggleSuccessModal, chosenProduct }) {
+  return (
+    <div
+      ref={modal}
+      class="modal show hidden fade fixed top-0 left-0 w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    >
+      <div class="modal-dialog relative w-auto pointer-events-none">
+        <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+          <div class="modal-body relative p-4">
+            <div className="SuccessModalImgDiv">
+              <img
+                src="/assets/redeemyrvouch.png"
+                className="modalImg"
+                alt="modalImg"
+              />
+              <p>You have successfully redeemed you vouchers</p>
+            </div>
+            {chosenProduct && (
+              <div className="ChosenProd mt-7">
+                <img src={chosenProduct.imageUrl} alt="..." />
+                {/* <div className="flex flex-wrap justify-evenly">
+                  <p>
+                    Denomination: <span>{order.denomination}</span>
+                  </p>
+                  <p>
+                    Quantity: <span>{order.quantity}</span>
+                  </p>
+                </div> */}
+              </div>
+            )}
+            {/* <div style={{ height: "300px" }}></div> */}
+          </div>
+          <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-between p-4 border-t border-gray-200 rounded-b-md">
+            <button
+              onClick={toggleSuccessModal}
+              type="button"
+              className="modalCloseBtn px-6 py-2.5 text-white font-medium text-xs leading-tight shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+            >
+              Close
+            </button>
+            <Link
+              to="/my-vouchers"
+              className="modalCloseBtn px-6 py-2.5 text-white font-medium text-xs leading-tight shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+            >
+              Go back to My Vouchers
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Modal({ modal, chosenProduct, toggleModal, handleSubmit, order }) {
+  return (
+    <div
+      ref={modal}
+      class="modal show hidden fade fixed top-0 left-0 w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    >
+      <div class="modal-dialog relative w-auto pointer-events-none">
+        <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+          <div class="modal-body relative p-4">
+            <div className="modalImgDiv">
+              <img
+                src="/assets/redeemyrvouch.png"
+                className="modalImg"
+                alt="modalImg"
+              />
+              <p>Redeem your vouchers</p>
+            </div>
+            {chosenProduct && (
+              <div className="ChosenProd mt-7">
+                <img src={chosenProduct.imageUrl} alt="..." />
+                <div className="flex flex-wrap justify-evenly">
+                  <p>
+                    Denomination: <span>{order.denomination}</span>
+                  </p>
+                  <p>
+                    Quantity: <span>{order.quantity}</span>
+                  </p>
+                </div>
+              </div>
+            )}
+            {/* <div style={{ height: "300px" }}></div> */}
+          </div>
+          <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-between p-4 border-t border-gray-200 rounded-b-md">
+            <button
+              onClick={toggleModal}
+              type="button"
+              className="modalCloseBtn px-6 py-2.5 text-white font-medium text-xs leading-tight shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+            >
+              Close
+            </button>
+            <button
+              onClick={handleSubmit}
+              type="button"
+              className="modalCloseBtn px-6 py-2.5 text-white font-medium text-xs leading-tight shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+            >
+              Redeem
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Quantity({ id, handleChange }) {
   return (
     <div className="select-bg">
