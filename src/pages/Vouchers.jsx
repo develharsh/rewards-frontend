@@ -12,8 +12,22 @@ import {
 import { loadUser } from "../actions/user";
 import Loader from "../components/Layout/Loader";
 import { useNavigate, Link } from "react-router-dom";
+import Pagination from "@mui/material/Pagination";
+import { makeStyles } from "@mui/styles";
 
 function Vouchers() {
+  const useStyles = makeStyles({
+    ul: {
+      "& .MuiPaginationItem-root": {
+        color: "#000",
+      },
+      "& .MuiPaginationItem-root.Mui-selected": {
+        backgroundColor: "#3a0d27 !important",
+        color: "#fff",
+      },
+    },
+  });
+  const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, message, error, vouchers } = useSelector(
@@ -193,7 +207,7 @@ function Vouchers() {
                 <div key={idx} className="mt-3 vouch-card rounded shadow-2xl">
                   <img src={each.imageUrl} alt="" />
                   <p>{each.name}</p>
-                  <div className="flex justify-evenly my-2">
+                  <div className="flex justify-evenly my-2 mx-2">
                     <p className="label">Denomination</p>
                     <Denomination
                       id={each.productId}
@@ -203,7 +217,7 @@ function Vouchers() {
                     <p className="label ml-2">Quantity</p>
                     <Quantity id={each.productId} handleChange={handleChange} />
                   </div>
-                  <div className="my-2">
+                  <div className="my-2 redeemBtnCard">
                     <img
                       src="/assets/redeembtn.svg"
                       alt=""
@@ -220,7 +234,9 @@ function Vouchers() {
               </div>
             )}
           </div>
-          {vouchers && <Pagination page={page} handlePage={handlePage} />}
+          {vouchers && (
+            <Paginator cls={classes} page={page} handlePage={handlePage} />
+          )}
         </div>
       </div>
     </>
@@ -366,51 +382,24 @@ function Denomination({ id, data, handleChange }) {
   );
 }
 
-function Pagination({ page, handlePage }) {
+function Paginator({ cls, page, handlePage }) {
+  let pages = [];
+  for (let x = 1; x <= 32; ++x) pages.push(x);
   return (
-    <div className="flex justify-center my-10">
-      <nav aria-label="Page navigation example">
-        <ul className="flex list-style-none">
-          <li className="page-item">
-            <a
-              onClick={() => handlePage(1)}
-              className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded-full text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-            >
-              First
-            </a>
-          </li>
-          <li className="page-item">
-            <a
-              onClick={() => handlePage(page - 1)}
-              className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded-full text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-            >
-              Previous
-            </a>
-          </li>
-          <li className="page-item active">
-            <a className="page-link relative block py-1.5 px-3 border-0 bg-blue-600 outline-none transition-all duration-300 rounded-full text-white hover:text-white hover:bg-blue-600 shadow-md focus:shadow-md">
-              {page}
-            </a>
-          </li>
-          <li className="page-item">
-            <a
-              onClick={() => handlePage(page + 1)}
-              className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded-full text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-            >
-              Next
-            </a>
-          </li>
-          <li className="page-item">
-            <a
-              onClick={() => handlePage(32)}
-              className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded-full text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-            >
-              Last
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <>
+      <div className="my-10 flex justify-center">
+        <Pagination
+          classes={{ ul: cls.ul }}
+          count={32}
+          page={page}
+          onChange={(e, v) => handlePage(v)}
+          showFirstButton
+          showLastButton
+
+          // color="red"
+        />
+      </div>
+    </>
   );
 }
 

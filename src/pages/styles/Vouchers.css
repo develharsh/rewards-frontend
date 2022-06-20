@@ -76,9 +76,11 @@
 }
 
 .vouch-card > p {
-  font: normal normal normal 18px/27px Poppins;
+  font: 17px;
+  font-family: "Poppins";
   color: #615f5f;
   margin: 1em;
+  height: 3.5rem;
   /* border:1px solid red; */
 }
 
@@ -159,6 +161,12 @@
 .modalCloseBtn {
   background-color: #3a0d27;
   border-radius: 32px;
+}
+
+.redeemBtnCard {
+  /* border: 10px solid red; */
+  top: 100px !important;
+  bottom: 10px;
 }
 
 /* tab */
